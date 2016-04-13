@@ -19,17 +19,21 @@ message('host cpu: ' + host_machine.cpu())
 message('host cpu_family: ' + host_cpu_family)
 message('host system: ' + host_system)
 
-# FIXME: Check
-# /* Define if symbols are underscored: LT_SYS_SYMBOL_USCORE */
-#define SYMBOL_UNDERSCORE
-# Nothing checks for STACK_DIRECTION
-
 # IMPORTANT: Some of these use set(), others set10(), and others only set(, 1)
 # conditionally. This is on purpose.
 # Some C code uses #ifdef HAVE_XXX and some #if !HAVE_XXX. To make things worse,
 # some symbols are also used inside .h.in headers that are configured and then
 # #include-ed at build time and installed. Each symbol has been carefully
 # checked. Please double-check before changing.
+#
+# Nothing checks for STACK_DIRECTION
+
+# FIXME: The actual check for this is LT_SYS_SYMBOL_USCORE, but that check is
+# far too complicated. We assume that on ELF targets there is no leading
+# underscore for symbols, and on WIN32 targets there is a leading underscore.
+if host_system == 'windows'
+  ffi_conf.set('SYMBOL_UNDERSCORE', 1)
+endif
 
 # Assembly directive support
 if cc.compiles('asm (".cfi_startproc\n\t.cfi_endproc");', name : 'ASM .cfi')
@@ -120,7 +124,9 @@ if host_cpu_family == 'x86_64' and cc.get_id() != 'msvc'
 endif
 
 # Check mmap()
-ffi_conf.set10('HAVE_MMAP', cc.has_function('mmap'))
+if cc.has_function('mmap')
+  ffi_conf.set('HAVE_MMAP', 1)
+endif
 ffi_conf.set('HAVE_MMAP_FILE', 1) # Works everywhere
 ffi_conf.set('HAVE_MMAP_DEV_ZERO',
   host_system != 'windows' and host_system != 'darwin')
@@ -159,7 +165,10 @@ ffi_conf.set('HAVE_STDINT_H', cc.has_header('stdint.h'))
 
 # Misc defines
 # FIXME: Check if this is compiler-specific check is correct
-ffi_conf.set('HAVE_HIDDEN_VISIBILITY_ATTRIBUTE', cc.get_id() != 'mscv')
+if host_system != 'windows'
+  message('Host system is not Windows; assuming .hidden pseudo-op is available')
+  ffi_conf.set('HAVE_HIDDEN_VISIBILITY_ATTRIBUTE', 1)
+endif
 
 # User options
 ffi_conf.set('FFI_DEBUG', get_option('debug'))
