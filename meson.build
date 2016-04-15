@@ -10,10 +10,6 @@ ffi_conf = configuration_data()
 
 # NOTE: host = "cross" or "target"
 host_cpu_family = host_machine.cpu_family()
-# Sometimes Python reports this instead of x86_64
-if host_cpu_family == 'amd64'
-  host_cpu_family = 'x86_64'
-endif
 host_system = host_machine.system()
 message('host cpu: ' + host_machine.cpu())
 message('host cpu_family: ' + host_cpu_family)
