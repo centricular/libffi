@@ -233,12 +233,12 @@ if [ -n "$assembly" ]; then
     fi
     ppsrc="$outdir/$(basename $src|sed 's/.S$/.asm/g')"
     echo "$cl -nologo -EP $includes $defines $src > $ppsrc"
-    "$cl" -nologo -EP $includes $defines $src > $ppsrc || exit $?
+    "$cl" -nologo -EP $includes $defines "$src" > "$ppsrc" || exit $?
     output="$(echo $output | sed 's%/F[dpa][^ ]*%%g')"
-    args="-nologo $safeseh $single $output $ppsrc"
+    args=()
 
-    echo "$ml $args"
-    eval "\"$ml\" $args"
+    echo "$ml -nologo $safeseh $single "$output" $ppsrc"
+    "$ml" -nologo $safeseh $single "$output" "$ppsrc"
     result=$?
 
     # required to fix ml64 broken output?
