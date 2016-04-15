@@ -6,6 +6,9 @@ project ('libffi', 'c', version : '3.2.1',
 
 cc = meson.get_compiler('c')
 
+# For FFI_EXTERN symbol exporting
+add_global_arguments('-DFFI_BUILDING', language : 'c')
+
 ffi_conf = configuration_data()
 
 # NOTE: host = "cross" or "target"
