@@ -10,7 +10,7 @@ configure_file(
   input : '../src/@0@/ffitarget.h'.format(arch_subdir),
   output : 'ffitarget-@0@.h'.format(host_cpu_family),
   configuration : configuration_data(),
-  insatll_dir : 'include')
+  install_dir : 'include')
 
 # Install noarch ffi.h that includes the arch-specific ffi.h header
 ffitarget_h_noarch_conf = configuration_data()
