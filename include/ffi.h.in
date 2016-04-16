@@ -74,11 +74,11 @@ extern "C" {
 /* of the library, but don't worry about that.  Besides,  */
 /* as a workaround, they can define FFI_STATIC_BUILD if   */
 /* they *know* they are going to link statically.         */
-#if defined _MSC_VER && !defined FFI_STATIC_BUILD
+#if defined _WIN32 && !defined FFI_STATIC_BUILD
 #ifdef FFI_BUILDING
-#define FFI_EXTERN __declspec(dllexport) extern
+#define FFI_EXTERN __declspec(dllexport)
 #else
-#define FFI_EXTERN __declspec(dllimport) extern
+#define FFI_EXTERN __declspec(dllimport)
 #endif
 #else
 #define FFI_EXTERN extern
