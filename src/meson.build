@@ -210,9 +210,13 @@ if cc.get_id() == 'msvc'
   # output as input), custom_target() for both (didn't work because the format
   # required is very specific, custom_target is processed during configure,
   # etc). Finally, I gave up and did this.
+  args = ['-c', '-I.', '-Iinclude']
+  if host_cpu_family == 'x86_64'
+    args += ['-m64'] # msvcc.sh checks this gcc flag to switch to 64-bit mode
+  endif
   compiler = generator(msvcc,
       output : '@BASENAME@.obj',
-      arguments : ['@INPUT@', '-c', '-I.', '-Iinclude', '-o', '@OUTPUT0@'])
+      arguments : ['@INPUT@'] + args + ['-o', '@OUTPUT0@'])
   ffi_asm_sources = compiler.process(ffi_asm_sources)
 endif
 
