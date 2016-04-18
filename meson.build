@@ -29,13 +29,13 @@ message('host system: ' + host_system)
 
 # FIXME: The actual check for this is LT_SYS_SYMBOL_USCORE, but that check is
 # far too complicated. We assume that on ELF targets there is no leading
-# underscore for symbols, and on WIN32 targets there is a leading underscore.
-if host_system == 'windows'
+# underscore for symbols, and on MSVC targets there is a leading underscore.
+if cc.get_id() == 'msvc'
   ffi_conf.set('SYMBOL_UNDERSCORE', 1)
 endif
 
 # Assembly directive support
-if cc.compiles('asm (".cfi_startproc\n\t.cfi_endproc");', name : 'ASM .cfi')
+if cc.compiles('asm (".cfi_startproc\n.cfi_endproc");', name : 'ASM .cfi')
   ffi_conf.set('HAVE_AS_CFI_PSEUDO_OP', 1)
 endif
 
@@ -99,9 +99,14 @@ endif
 if cc.get_id() == 'gcc' or cc.get_id() == 'llvm'
   # FIXME: Actually check for this instead of hard-coding it
   # Also, check if this is actually correct
-  message('.eh_frame is hard-coded to ro')
-  ffi_conf.set('HAVE_RO_EH_FRAME', 1)
-  ffi_conf.set('EH_FRAME_FLAGS', 'a')
+  if host_cpu_family == 'x86_64'
+    message('.eh_frame is hard-coded to not be ro')
+    ffi_conf.set('EH_FRAME_FLAGS', '"aw"')
+  else
+    message('.eh_frame is hard-coded to ro')
+    ffi_conf.set('HAVE_RO_EH_FRAME', 1)
+    ffi_conf.set('EH_FRAME_FLAGS', '"a"')
+  endif
 endif
 
 if host_cpu_family == 'arm' and host_system == 'darwin'
@@ -170,11 +175,21 @@ if host_system != 'windows'
 endif
 
 # User options
-ffi_conf.set('FFI_DEBUG', get_option('debug'))
-ffi_conf.set10('FFI_NO_RAW_API', host_cpu_family == 'x86_64' or not get_option('raw_api'))
-ffi_conf.set10('FFI_NO_STRUCTS', not get_option('structs'))
-ffi_conf.set('USING_PURIFY', get_option('purify_safety'))
-ffi_conf.set('FFI_MMAP_EXEC_EMUTRAMP_PAX', get_option('pax_emutramp'))
+if get_option('debug')
+  ffi_conf.set('FFI_DEBUG')
+endif
+if host_cpu_family == 'x86_64' or not get_option('raw_api')
+  ffi_conf.set('FFI_NO_RAW_API', 1)
+endif
+if not get_option('structs')
+  ffi_conf.set('FFI_NO_STRUCTS', 1)
+endif
+if get_option('purify_safety')
+  ffi_conf.set('USING_PURIFY', 1)
+endif
+if get_option('pax_emutramp')
+  ffi_conf.set('FFI_MMAP_EXEC_EMUTRAMP_PAX', 1)
+endif
 
 msvcc = find_program('msvcc.sh')
 
