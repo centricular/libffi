@@ -171,7 +171,7 @@ endif
 
 # User options
 ffi_conf.set('FFI_DEBUG', get_option('debug'))
-ffi_conf.set10('FFI_NO_RAW_API', not get_option('raw_api'))
+ffi_conf.set10('FFI_NO_RAW_API', host_cpu_family == 'x86_64' or not get_option('raw_api'))
 ffi_conf.set10('FFI_NO_STRUCTS', not get_option('structs'))
 ffi_conf.set('USING_PURIFY', get_option('purify_safety'))
 ffi_conf.set('FFI_MMAP_EXEC_EMUTRAMP_PAX', get_option('pax_emutramp'))

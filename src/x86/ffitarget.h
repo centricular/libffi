@@ -138,7 +138,6 @@ typedef enum ffi_abi {
 #ifdef X86_WIN64
 #define FFI_TRAMPOLINE_SIZE 29
 #define FFI_NATIVE_RAW_API 0
-#define FFI_NO_RAW_API 1
 #else
 #define FFI_TRAMPOLINE_SIZE 10
 #endif

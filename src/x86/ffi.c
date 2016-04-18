@@ -906,7 +906,6 @@ ffi_raw_call(ffi_cif *cif, void (*fn)(void), void *rvalue, ffi_raw *fake_avalue)
                     ecif.rvalue, fn);
       break;
 #else
-    case FFI_SYSV:
     case FFI_MS_CDECL:
 #endif
 #ifndef X86_WIN64
