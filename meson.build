@@ -30,7 +30,7 @@ message('host system: ' + host_system)
 # FIXME: The actual check for this is LT_SYS_SYMBOL_USCORE, but that check is
 # far too complicated. We assume that on ELF targets there is no leading
 # underscore for symbols, and on MSVC targets there is a leading underscore.
-if cc.get_id() == 'msvc'
+if host_system == 'windows'
   ffi_conf.set('SYMBOL_UNDERSCORE', 1)
 endif
 
