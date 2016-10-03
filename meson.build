@@ -1,8 +1,7 @@
-project ('libffi', 'c', version : '3.2.1',
-	 meson_version : '>= 0.32.0',
-	 default_options : ['buildtype=debugoptimized',
-                            'warning_level=1',
-                            'c_std=gnu99'])
+project('libffi', 'c', version : '3.2.1',
+        meson_version : '>= 0.32.0',
+        default_options : ['buildtype=debugoptimized',
+                           'warning_level=1'])
 
 cc = meson.get_compiler('c')
 
