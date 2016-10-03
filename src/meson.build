@@ -28,6 +28,10 @@ elif host_cpu_family == 'x86_64'
   if host_system == 'windows'
     ffi_conf.set('TARGET', 'X86_WIN64')
     ffi_asm_sources += ['x86/win64.S']
+  elif host_system == 'darwin'
+    ffi_conf.set('TARGET', 'X86_DARWIN')
+    ffi_c_sources += ['x86/ffi64.c']
+    ffi_asm_sources += ['x86/darwin.S', 'x86/darwin64.S']
   elif size_t == 4
     ffi_conf.set('TARGET', 'X86')
     ffi_asm_sources += ['x86/sysv.S', 'x86/win32.S']
