@@ -26,11 +26,20 @@ message('host system: ' + host_system)
 #
 # Nothing checks for STACK_DIRECTION
 
-# FIXME: The actual check for this is LT_SYS_SYMBOL_USCORE, but that check is
-# far too complicated. We assume that on ELF targets there is no leading
-# underscore for symbols, and on MSVC targets there is a leading underscore.
+# The actual check for this is LT_SYS_SYMBOL_USCORE, but that check is far too
+# complicated; compiles a file, runs `nm` on it and then greps for the symbol.
+# FIXME: Add a helper function to Meson for this.
+#
+# For now, we assume that on ELF targets there is no leading
+# underscore for symbols and we have hard-coded results for Windows.
 if host_system == 'windows'
-  ffi_conf.set('SYMBOL_UNDERSCORE', 1)
+  if build_machine.system() == 'windows'
+    if cc.get_id() == 'msvc' or host_cpu_family != 'x86_64'
+      ffi_conf.set('SYMBOL_UNDERSCORE', 1)
+    endif
+  else
+    message('gcc on 64-bit Windows does not use leading underscores in symbols')
+  endif
 endif
 
 # Assembly directive support
