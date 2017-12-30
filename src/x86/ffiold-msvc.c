@@ -99,11 +99,13 @@ unsigned int ffi_prep_args(char *stack, extended_cif *ecif)
        i != 0;
        i--, p_arg += dir, p_argv += dir)
     {
+      size_t z;
+
       /* Align if necessary */
       if ((sizeof(void*) - 1) & (size_t) argp)
         argp = (char *) ALIGN(argp, sizeof(void*));
 
-      size_t z = (*p_arg)->size;
+      z = (*p_arg)->size;
 
 #ifdef X86_WIN64
       if (z > FFI_SIZEOF_ARG
@@ -599,11 +601,13 @@ ffi_prep_incoming_args(char *stack, void **rvalue, void **avalue,
        i != 0;
        i--, p_arg += dir, p_argv += dir)
     {
+      size_t z;
+
       /* Align if necessary */
       if ((sizeof(void*) - 1) & (size_t) argp)
         argp = (char *) ALIGN(argp, sizeof(void*));
 
-      size_t z = (*p_arg)->size;
+      z = (*p_arg)->size;
 
 #ifdef X86_WIN64
       if (z > FFI_SIZEOF_ARG
