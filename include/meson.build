@@ -12,7 +12,7 @@ configure_file(
   configuration : configuration_data(),
   install_dir : 'include')
 
-# Install noarch ffi.h that includes the arch-specific ffi.h header
+# Install noarch ffitarget.h that includes the arch-specific ffitarget.h
 ffitarget_h_noarch_conf = configuration_data()
 ffitarget_h_noarch_conf.set('ARCH', host_cpu_family)
 ffitarget_h_noarch_conf.set('HEADER', 'ffitarget')
@@ -20,7 +20,7 @@ configure_file(input : 'ffi_noarch.h.meson', output : 'ffitarget.h',
   configuration : ffitarget_h_noarch_conf,
   install_dir : 'include')
 
-# Install noarch ffitarget.h that includes the arch-specific fftarget.h
+# Install noarch ffi.h that includes the arch-specific ffi.h header
 ffi_h_noarch_conf = configuration_data()
 ffi_h_noarch_conf.set('ARCH', host_cpu_family)
 ffi_h_noarch_conf.set('HEADER', 'ffi')

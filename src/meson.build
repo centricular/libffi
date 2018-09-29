@@ -13,9 +13,9 @@ if get_option('ffi-debug')
 endif
 
 # We only support x86 on Windows and Linux right now
-arch_subdir = 'x86'
 if host_system == 'windows'
   # No ARM support for Windows in libffi
+  arch_subdir = 'x86'
   if size_t == 4
     TARGET = 'X86_WIN32'
     if cc.get_id() == 'msvc'
@@ -35,6 +35,7 @@ if host_system == 'windows'
     endif
   endif
 elif host_system == 'linux' and host_cpu_family.startswith('x86')
+  arch_subdir = 'x86'
   if size_t == 4
     # FIXME: gnux32 support?
     TARGET = 'X86'
@@ -45,6 +46,11 @@ elif host_system == 'linux' and host_cpu_family.startswith('x86')
     ffi_c_sources += ['x86/ffi64.c', 'x86/ffiw64.c']
     ffi_asm_sources += ['x86/unix64.S', 'x86/win64.S']
   endif
+elif host_system == 'linux' and host_cpu_family.startswith('aarch64')
+  arch_subdir = 'aarch64'
+  TARGET = 'AARCH64'
+  ffi_c_sources += ['aarch64/ffi.c']
+  ffi_asm_sources += ['aarch64/sysv.S']
 else
   error('Unsupported system "@0@" or cpu family "@1@"'.format(host_system, host_cpu_family))
 endif
