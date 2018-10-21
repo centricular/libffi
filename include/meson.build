@@ -9,8 +9,8 @@ configure_file(input : 'ffi.h.in',
 configure_file(
   input : '../src/@0@/ffitarget.h'.format(arch_subdir),
   output : 'ffitarget-@0@.h'.format(host_cpu_family),
-  configuration : configuration_data(),
-  install_dir : 'include')
+  install_dir : 'include',
+  copy : true)
 
 # Install noarch ffitarget.h that includes the arch-specific ffitarget.h
 ffitarget_h_noarch_conf = configuration_data()

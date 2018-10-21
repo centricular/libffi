@@ -57,6 +57,7 @@ endif
 
 # Used in ffi.h.in to generate ffi-$arch.h
 ffi_conf.set('TARGET', TARGET)
+ffi_conf.set('VERSION', meson.project_version())
 
 if cc.get_id() == 'msvc'
   # GCC and Clang accept assembly files directly, but MSVC's cl.exe does not.
@@ -98,6 +99,11 @@ ffi_lib = library('ffi', ffi_c_sources, ffi_asm_sources,
   # current + 1
   darwin_versions : '9',
   install : true)
+
+pkgconf = import('pkgconfig')
+pkgconf.generate(ffi_lib,
+  description : 'Library supporting Foreign Function Interfaces',
+  filebase : 'libffi')
 
 ffi_dep = declare_dependency(link_with : ffi_lib,
   include_directories : ffiinc)

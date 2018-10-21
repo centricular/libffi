@@ -1,5 +1,5 @@
 project('libffi', 'c', version : '3.2.1',
-        meson_version : '>= 0.37.1',
+        meson_version : '>= 0.47.0',
         default_options : ['buildtype=debugoptimized',
                            'warning_level=1'])
 
@@ -188,18 +188,6 @@ if get_option('pax_emutramp')
 endif
 
 msvcc = find_program('msvcc.sh')
-
-# pkg-config file
-ffi_pc_conf = configuration_data()
-ffi_pc_conf.set('prefix', get_option('prefix'))
-ffi_pc_conf.set('exec_prefix', get_option('prefix'))
-ffi_pc_conf.set('libdir', '@0@/@1@'.format(get_option('prefix'), get_option('libdir')))
-ffi_pc_conf.set('includedir', '@0@/include'.format(get_option('prefix')))
-ffi_pc_conf.set('PACKAGE_VERSION', meson.project_version())
-pkgconfigdir = get_option('libdir') + '/pkgconfig'
-configure_file(input : 'libffi.pc.in', output : 'libffi.pc',
-  configuration : ffi_pc_conf,
-  install_dir : pkgconfigdir)
 
 ffiinc = [include_directories('.'), include_directories('include')]
 
