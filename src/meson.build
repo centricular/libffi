@@ -46,7 +46,7 @@ elif host_system == 'linux' and host_cpu_family.startswith('x86')
     ffi_c_sources += ['x86/ffi64.c', 'x86/ffiw64.c']
     ffi_asm_sources += ['x86/unix64.S', 'x86/win64.S']
   endif
-elif host_system == 'linux' and host_cpu_family.startswith('aarch64')
+elif host_cpu_family.startswith('aarch64')
   arch_subdir = 'aarch64'
   TARGET = 'AARCH64'
   ffi_c_sources += ['aarch64/ffi.c']
